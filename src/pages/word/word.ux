@@ -1,0 +1,122 @@
+<template>
+    <div class="page" @swipe="goBack">
+      <text class="title">{{i}}</text>
+      <scroll class="list" scroll-y="true">
+        <div class="transcription">
+            <marquee class="transcription-title" scrollamount="60">{{s}}</marquee>
+        </div>
+        <div class="translation" for="row in translation">
+            <marquee class="translation-title" scrollamount="60">{{row}}</marquee>
+        </div>
+        <div class="footer"></div>
+      </scroll>
+    </div>
+  </template>
+  
+  <script>
+  import router from "@system.router"
+  
+  export default {
+    private: {
+    },
+    public: {
+        i: null,
+        o: null,
+        s: null
+    },
+    computed: {
+        translation() {
+            let arr = this.o.split(",")
+            let result = []
+            for(let i = 0; i < arr.length; i++) {
+                result.push(arr[i].trim())
+            }
+            return result
+        }
+    },
+    goBack(eve) {
+        if(eve.direction === "right") {
+            router.back();
+        }
+    },  
+  }
+  </script>
+  
+  <style>
+  .page {
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    background-color: black;
+    width: 192px;
+    height: 490px;
+  }
+  
+  .title {
+    font-size: 28px;
+    text-align: center;
+    margin-top: 45px;
+    width: 192px;
+    height: 35px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .list {
+    flex-direction: column;
+    width: 192px;
+    height: 380px;
+  }
+  .translation {
+    width: 182px;
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #202020;
+    border-radius: 10px;
+  }
+
+  .translation-title {
+    width: 182px;
+    color: #ffffff;
+    font-size: 28px;
+    height: 60px;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+  .transcription {
+    width: 182px;
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #4c8bf5;
+    border-radius: 10px;
+  }
+
+  .transcription-title {
+    width: 182px;
+    color: #ffffff;
+    font-size: 28px;
+    height: 40px;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .footer {
+    width: 192px;
+    height: 30px;
+    background-color: #000000;
+  }
+  </style>
+  

@@ -1,0 +1,176 @@
+<template>
+    <div class="page" @swipe="goBack">
+      <text class="title">{{title}}</text>
+      <scroll class="list" scroll-y="true">
+        <div class="word" for="row in words" @click="openWord(row)">
+            <text class="word-title">{{row.i}}</text>
+        </div>
+        <div class="letter" for="row in data" @click="open(row)">
+            <text class="letter-title">{{row.letter.toUpperCase()}}</text>
+            <text class="letter-count">{{row.words}} words</text>
+        </div>
+        <div class="footer"></div>
+      </scroll>
+    </div>
+  </template>
+  
+  <script>
+  import router from "@system.router"
+  import {VocabularyUtils} from "../../utils/vocabulary"
+  
+  export default {
+    private: {
+      data: [],
+      words: [],
+    },
+    public: {
+        filename: "",
+        prefix: "",
+        table_offset: null,
+        table_length: null
+    },
+    computed: {
+        filepath() {
+            return `/common/data/${this.filename}.txt`
+        },
+        title() {
+          if(this.prefix) return this.prefix;
+          return this.filename
+        }
+    },
+    goBack(eve) {
+        if(eve.direction === "right") {
+            router.back();
+        }
+    },
+    open(value) {
+      console.log(value)
+      router.push({
+        uri: "pages/search",
+        params: {
+          filename: this.filename,
+          prefix: `${this.prefix}${value.letter}`,
+          table_offset: value.next_offset,
+          table_length: value.next_length,
+        }
+      })
+    },
+    openWord(value) {
+      console.log(value)
+      router.push({
+        uri: "pages/word",
+        params: {
+          ...value
+        }
+      })
+    },
+    onInit() {
+      if(!this.table_offset || !this.table_length) {
+          VocabularyUtils.readFirstSize(this.filepath, this.onReadFirstSize)
+      } else {
+        this.readTable()
+      }
+    },
+    onReadFirstSize(data) {
+      this.table_offset = 4
+      this.table_length = data
+      this.readTable()
+    },
+    readTable() {
+      VocabularyUtils.readTable(this.filepath, this.table_offset, this.table_length, this.onTableRead)
+    },
+    onTableRead(result) {
+      //console.log(result)
+      this.data = result.tables
+      this.words = result.words
+    }
+  
+  }
+  </script>
+  
+  <style>
+  .page {
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    background-color: black;
+    width: 192px;
+    height: 490px;
+  }
+  
+  .title {
+    font-size: 28px;
+    text-align: center;
+    margin-top: 45px;
+    width: 192px;
+    height: 35px;
+    color: #ffffff;
+    margin-bottom: 20px;
+  }
+  
+  .list {
+    flex-direction: column;
+    width: 192px;
+    height: 380px;
+  }
+  .letter {
+    width: 182px;
+    height: 80px;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #202020;
+    border-radius: 10px;
+  }
+
+  .letter-title {
+    width: 182px;
+    color: #ffffff;
+    font-size: 28px;
+    height: 38px;
+    text-align: center;
+    justify-content: center;
+    margin-bottom: 0px;
+  }
+
+  .letter-count {
+    width: 182px;
+    color: #aaaaaa;
+    font-size: 20px;
+    height: 30px;
+    text-align: center;
+  }
+  .word {
+    width: 182px;
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ffffff;
+    background-color: #4c8bf5;
+    border-radius: 10px;
+  }
+
+  .word-title {
+    width: 182px;
+    color: #ffffff;
+    font-size: 28px;
+    height: 50px;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .footer {
+    width: 192px;
+    height: 30px;
+    background-color: #000000;
+  }
+  </style>
+  

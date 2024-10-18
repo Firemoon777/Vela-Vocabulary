@@ -1,0 +1,89 @@
+<template>
+  <div class="page">
+    <text class="title">Vocabularies</text>
+    <list class="list">
+      <list-item class="row" type="item">
+        <a class="btn" @click="open('ENG-RU')">ENG-RU</a>
+      </list-item>
+      <list-item class="row" type="item">
+        <a class="btn" style="background-color: #4c8bf5" @click="about()">About</a>
+      </list-item>
+    </list>
+  </div>
+</template>
+
+<script>
+import router from "@system.router"
+import file from '@system.file'
+
+export default {
+  private: {
+    data: [],
+  },
+
+  open(value) {
+    router.push({
+      uri: "/pages/search",
+      params: {
+        filename: value
+      }
+    })
+  },
+  about() {
+    router.push({
+      uri: "pages/AboutScreen"
+    })
+  }
+
+}
+</script>
+
+<style>
+.page {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  width: 192px;
+  height: 490px;
+}
+
+.title {
+  font-size: 28px;
+  text-align: center;
+  margin-top: 45px;
+  width: 192px;
+  height: 35px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.list {
+  flex-direction: column;
+  width: 192px;
+  height: 380px;
+}
+
+.row {
+  width: 192px;
+  height: 60px;
+}
+
+.btn {
+  width: 182px;
+  height: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #ffffff;
+  background-color: #202020;
+  border-radius: 10px;
+}
+
+.footer {
+  width: 192px;
+  height: 30px;
+  background-color: #000000;
+}
+</style>
